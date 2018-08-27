@@ -58,18 +58,26 @@ public class FXMLCadastroClienteController implements Initializable {
     private ObservableList<Cliente> observableListClientes;
 
     private final ClienteDAO clienteDAO = new ClienteDAO();
-
+    
+    /**
+     * Esse método sempre é chamado na inicialização do controlador. Da forma como está, ele
+     * preenche o TableView de Clientes e faz funcionar um Listener (observador) nessa TableView.
+     * 
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         preencherTableViewClientes();
 
+        
+        //Esse Listener tem o objetivo de identificar sempre que um cliente for selecionado na Tabela.
+        //Quando o cliente for selecionado, seus dados completos serão apresentados ao lado 
+        // (código, nome, cpf e telefone) através do método selecionarItemTvClientes
         tvClientes.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> selecionarItemTvClientes(newValue));
 
         /**
          * IMPLEMENTAÇÃO DO LISTENER SEM O USO DE LAMBDA ->
-         * tvClientes.getSelectionModel().selectedItemProperty().addListener(new
-         * ChangeListener<Cliente>() {
+         * tvClientes.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Cliente>() {
          *
          * @Override public void changed(ObservableValue<? extends Cliente>
          * observable, Cliente oldValue, Cliente newValue) {
@@ -79,18 +87,31 @@ public class FXMLCadastroClienteController implements Initializable {
          */
     }
 
+    /**
+     * Preenche a TableView na tela
+     * 
+     * 
+     */
     public void preencherTableViewClientes() {
-
+        
+        //Cria um vínculo entre as colunas na tela e os atributos da classe Cliente
         tvColunaClientesNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         tvColunaClientesCpf.setCellValueFactory(new PropertyValueFactory<>("cpf"));
-
+        
+        //Traz os clientes cadastrados no BD
         listClientes = clienteDAO.listar();
-
+        
+        //vincla o observador com a lista trazida do BD; sempre que um novo cliente for cadastrado
+        //ele também aparecerá na tela
         observableListClientes = FXCollections.observableArrayList(listClientes);
         tvClientes.setItems(observableListClientes);
 
     }
 
+    /**
+     * Método chamado quando um item é selecionado na TableView; preenche os labels na parte direita da tela
+     * @param cliente 
+     */
     private void selecionarItemTvClientes(Cliente cliente) {
         if (cliente != null) {
             lbCodigo.setText(String.valueOf(cliente.getCodCliente()));
