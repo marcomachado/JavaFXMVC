@@ -5,6 +5,10 @@
  */
 package javafxmvc.model.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javafxmvc.model.domain.Cliente;
@@ -15,13 +19,73 @@ import javafxmvc.model.domain.Cliente;
  */
 public class ClienteDAO {
     
-    public List<Cliente> listar() {
-        List<Cliente> clientes = new ArrayList<>();
-        clientes.add(new Cliente(1, "joão", "111.111.111.11", "123456"));
-        clientes.add(new Cliente(2, "maria", "222.222.222.22", "456789"));
-        clientes.add(new Cliente(3, "beatriz", "333.333.333.33", "987645431"));
-        
-        return clientes;
-    }
+    Connection connection;
     
+    public ClienteDAO () {
+        connection = new ConnectionFactory().conectar();
+    }
+
+    public boolean inserir(Cliente cliente) {
+        String sql = "INSERT INTO clientes(nome, cpf, telefone) VALUES(?,?,?)";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, cliente.getNome());
+            stmt.setString(2, cliente.getCpf());
+            stmt.setString(3, cliente.getTelefone());
+            stmt.execute();
+            return true;
+        } catch (SQLException ex) {
+            System.err.println("ERRO: "+ex.getMessage());
+            return false;
+        }
+    }
+
+    public boolean alterar(Cliente cliente) {
+        String sql = "UPDATE clientes SET nome=?, cpf=?, telefone=? WHERE codCliente=?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, cliente.getNome());
+            stmt.setString(2, cliente.getCpf());
+            stmt.setString(3, cliente.getTelefone());
+            stmt.setInt(4, cliente.getCodCliente());
+            stmt.execute();
+            return true;
+        } catch (SQLException ex) {
+            System.err.println("ERRO: "+ex.getMessage());
+            return false;
+        }
+    }
+
+    public boolean remover(Cliente cliente) {
+        String sql = "DELETE FROM clientes WHERE codCliente=?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, cliente.getCodCliente());
+            stmt.execute();
+            return true;
+        } catch (SQLException ex) {
+            System.err.println("ERRO: "+ex.getMessage());
+            return false;
+        }
+    }
+
+    public List<Cliente> listar() {
+        String sql = "SELECT * FROM clientes";
+        List<Cliente> retorno = new ArrayList<>();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            ResultSet resultado = stmt.executeQuery();
+            while (resultado.next()) {
+                Cliente cliente = new Cliente();
+                cliente.setCodCliente(resultado.getInt("codCliente"));
+                cliente.setNome(resultado.getString("nome"));
+                cliente.setCpf(resultado.getString("cpf"));
+                cliente.setTelefone(resultado.getString("telefone"));
+                retorno.add(cliente);
+            }
+        } catch (SQLException ex) {
+            System.err.println("ERRO: "+ex.getMessage());
+        }
+        return retorno;
+    }
 }

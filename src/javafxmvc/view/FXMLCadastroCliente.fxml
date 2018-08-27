@@ -60,9 +60,9 @@
                   </GridPane>
                   <Group layoutX="36.0" layoutY="290.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
                      <children>
-                        <Button fx:id="btInserir" mnemonicParsing="false" text="Inserir" />
-                        <Button fx:id="btAlterar" layoutX="74.0" mnemonicParsing="false" text="Alterar" />
-                        <Button fx:id="btRemover" layoutX="147.0" mnemonicParsing="false" text="Remover" />
+                        <Button fx:id="btInserir" mnemonicParsing="false" onAction="#handleInserirCliente" text="Inserir" />
+                        <Button fx:id="btAlterar" layoutX="74.0" mnemonicParsing="false" onAction="#handleAlterarCliente" text="Alterar" />
+                        <Button fx:id="btRemover" layoutX="147.0" mnemonicParsing="false" onAction="#handleRemoverCliente" text="Remover" />
                      </children>
                   </Group>
                </children>
