@@ -1,6 +1,8 @@
 package javafxmvc.model.domain;
 
 import java.io.Serializable;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 public class Cliente implements Serializable {
 
@@ -8,10 +10,11 @@ public class Cliente implements Serializable {
     private String nome;
     private String cpf;
     private String telefone;
+    private BooleanProperty chamada = new SimpleBooleanProperty(true);
 
-    public Cliente(){
+    public Cliente() {
     }
-    
+
     public Cliente(int cdCliente, String nome, String cpf, String telefone) {
         this.codCliente = cdCliente;
         this.nome = nome;
@@ -42,7 +45,7 @@ public class Cliente implements Serializable {
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
-    
+
     public String getTelefone() {
         return telefone;
     }
@@ -55,5 +58,17 @@ public class Cliente implements Serializable {
     public String toString() {
         return this.nome;
     }
-    
+
+    public boolean isChamada() {
+        return chamada.get();
+    }
+
+    public void setChamada(boolean chamada) {
+        this.chamada.set(chamada);
+    }
+
+    public BooleanProperty chamadaProperty() {
+        return chamada;
+    }
+
 }
