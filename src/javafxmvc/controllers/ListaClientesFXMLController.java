@@ -5,17 +5,18 @@
  */
 package javafxmvc.controllers;
 
-import br.com.testefx.TesteCheckBox;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -47,22 +48,33 @@ public class ListaClientesFXMLController implements Initializable {
 
     @FXML
     private Button mostrar;
-
+    
+    @FXML
+    private Hyperlink mostrarLink;
+       
+    private StringProperty usuarioLogado = new SimpleStringProperty();
+    
+    Cliente cliente;
+    
     private List<Cliente> listClientes;
     private ObservableList<Cliente> observableListClientes;
     private final ClienteDAO clienteDAO = new ClienteDAO();
 
     @FXML
     private void showSelected() {
+        cliente = new Cliente();
+        System.out.println(cliente);
         for (Cliente p : clientesTable.getItems()) {
             System.out.printf("%s (Faltou: %s)%n", p.getNome(), !p.isChamada()? "Sim" : "Não");
         }
         System.out.println();
-
+        usuarioLogado.set("marco");
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        cliente = new Cliente();
+        
         clientesTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tableColumnNome.setCellValueFactory(new PropertyValueFactory<Cliente, String>("nome"));
         tableColumnCpf.setCellValueFactory(new PropertyValueFactory<Cliente, String>("cpf"));
@@ -73,6 +85,9 @@ public class ListaClientesFXMLController implements Initializable {
 
 //table display preference - should not affect this exercise/problem
         clientesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+                
+        mostrar.setDisable(true);
+        mostrar.disableProperty().bind(Bindings.isEmpty(usuarioLogado));
     }
 
     public void preencherTableViewClientes() {

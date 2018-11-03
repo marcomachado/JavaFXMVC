@@ -31,11 +31,12 @@ public class Cliente implements Serializable {
     }
 
     public String getNome() {
-        return nome;
+        return nome.toString();
     }
-
+    
     public void setNome(String nome) {
         this.nome = nome;
+
     }
 
     public String getCpf() {
@@ -52,11 +53,6 @@ public class Cliente implements Serializable {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
-    }
-
-    @Override
-    public String toString() {
-        return this.nome;
     }
 
     public boolean isChamada() {

@@ -17,16 +17,15 @@ import javafx.stage.Stage;
  * @author marco
  */
 public class JavaFXMVCCliente extends Application {
-    
+    private Stage dialongStage;
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("view/ListaClientesFXML.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../view/ListaClientesFXML.fxml"));
         
-        Scene scene = new Scene(root);
+        Scene scenePrincipal = new Scene(root);
         
-        stage.setScene(scene);
+        stage.setScene(scenePrincipal);
         stage.setResizable(false);
-        stage.show();
     }
 
     /**
@@ -35,5 +34,14 @@ public class JavaFXMVCCliente extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+    public Stage getDialongStage() {
+        return dialongStage;
+    }
+
+    /**
+     * @param dialongStage the dialongStage to set
+     */
+    public void setDialongStage(Stage dialongStage) {
+        this.dialongStage = dialongStage;
+    }
 }
